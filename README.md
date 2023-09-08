@@ -1,0 +1,2 @@
+# djangocms-boilerplate
+DjangoCMS Boilerplate
