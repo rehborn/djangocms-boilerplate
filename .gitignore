@@ -1,0 +1,9 @@
+.vscode
+.idea
+
+static/
+media/
+node_modules/
+*.mo
+
+config

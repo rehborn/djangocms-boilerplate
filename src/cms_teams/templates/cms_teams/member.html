@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load i18n static cms_tags menu_tags sekizai_tags thumbnail %}
+
+{% block title %}{{ settings.user.title }}{% page_attribute "page_title" %} - {{ profile.user.first_name }} {{ profile.user.last_name }}{% endblock title %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <div class="text-end">
+            <a href="{% url 'admin:auth_user_change' user.id %}"
+               class="btn btn-sm btn-primary">{% trans "edit user" %}</a>
+            <hr/>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-3 m-4">
+            <img alt="{{ profile.user.first_name }} {{ profile.user.last_name }}" class="rounded-circle w-100"
+                 src="
+                         {% if profile.photo %}{% thumbnail profile.photo 512x512 crop upscale %}{% else %}{% static "avatar.png" %}{% endif %}"/>
+
+        </div>
+        <div class="col m-4">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="m-0">
+                        {{ profile.title }} {{ profile.user.first_name }} {{ profile.user.last_name }}
+                    </h1>
+                    {% if profile.role %}
+                        <h2 style="font-style: italic">
+                            {{ profile.role }}
+                        </h2>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card-text">
+                                {{ profile.description }}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <table class="table table-striped w-100">
+                                {% for item in meta %}
+                                    <tr>
+                                        <td style="width: 2%">
+                                            {% if item.info == 'email' %}
+                                                <i class="fas fa-envelope"></i>
+                                            {% elif item.info == 'phone' %}
+                                                <i class="fas fa-phone"></i>
+                                            {% elif item.info == 'linkedin' %}
+                                                <img alt="Linkedin" src="{% static "simple-icons/icons/linkedin.svg" %}"
+                                                     width="20px"/>
+                                            {% elif item.info == 'xing' %}
+                                                <img alt="XING" src="{% static "simple-icons/icons/xing.svg" %}"
+                                                     width="20px"/>
+                                            {% elif item.info == 'link' %}
+                                                <i class="fas fa-link"></i>
+                                            {% else %}
+                                                <i class="fas fa-info-circle"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if item.info == 'email' %}
+                                                <a href="mailto:{{ item.value }}">{{ item.value }}</a>
+                                            {% elif item.info == 'phone' %}
+                                                <a href="tel:{{ item.value }}">{{ item.value }}</a>
+                                                {% if item.name %}
+                                                    <small class="text-muted">{{ item.name }}</small>
+                                                {% endif %}
+                                            {% elif item.info == 'linkedin' %}
+                                                <a href="https://www.linkedin.com/in/{{ item.value }}" title="Linkedin"
+                                                   target="_blank">
+                                                    {{ item.value }}
+                                                </a>
+                                            {% elif item.info == 'xing' %}
+                                                <a href="https://www.xing.com/profile/{{ item.value }}" title="XING"
+                                                   target="_blank">
+                                                    {{ item.value }}
+                                                </a>
+                                            {% elif item.info == 'link' %}
+                                                <a href="{{ item.value }}" title="{{ item.name }}" target="_blank">
+                                                    {% if item.name %}
+                                                        {{ item.name }}
+                                                    {% else %}
+                                                        {{ item.value }}
+                                                    {% endif %}
+                                                </a>
+                                            {% else %}
+                                                {{ item.value }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}
+
+{% block css %}
+
+    {% if profile.background %}
+        <style>
+            body {
+                background-image: url({% thumbnail profile.background 1920x1080 %}) !important;
+                background-repeat: no-repeat;
+            {% if profile.background.default_caption %}
+                background-position: 50% {{ profile.background.default_caption }}% !important;
+            {% else %}
+                background-position: 50% 0% !important;
+            {% endif %}
+            }
+        </style>
+    {% endif %}
+{% endblock css %}

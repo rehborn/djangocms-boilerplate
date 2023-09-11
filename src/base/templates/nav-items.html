@@ -1,0 +1,49 @@
+{% for child in children %}
+    {% if not child.children %}
+        {# Single Item #}
+        <li class="navbar-item {% if child.selected %}active{% endif %}">
+            <a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}" class="nav-link">
+                {{ child.get_menu_title }}
+            </a>
+        </li>
+    {% else %}
+        {# dropdown #}
+        <li class="navbar-item dropdown {% if child.selected or request.current_page.get_root.id == child.id %}active{% endif %}">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                {{ child.get_menu_title }} <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                {% for child2 in child.children %}
+                    {% if not child2.children %}
+                        {# Dropdown Items #}
+                        <li class="{% if child2.get_absolute_url in request.path %}active{% endif %}">
+                            <a href="{{ child2.attr.redirect_url|default:child2.get_absolute_url }}"
+                               class="dropdown-item">
+                                {{ child2.get_menu_title }}
+                            </a>
+                        </li>
+                    {% else %}
+                        {# Dropdown Submenu #}
+                        <li class="dropdown-submenu {% if child2.get_absolute_url in request.path %}active{% endif %}">
+                            <a tabindex="-1" class="dropdown-item" data-bs-toggle="dropdown-submenu"
+                               href="{{ child2.attr.redirect_url|default:child2.get_absolute_url }}">
+                                {{ child2.get_menu_title }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% for child3 in child2.children %}
+                                    {# Dropdown Submenu Items #}
+                                    <li class="{% if child3.get_absolute_url == request.path %}active{% endif %}">
+                                        <a tabindex="-1" class="dropdown-item"
+                                           href="{{ child3.attr.redirect_url|default:child3.get_absolute_url }}">
+                                            {{ child3.get_menu_title }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </li>
+    {% endif %}
+{% endfor %}

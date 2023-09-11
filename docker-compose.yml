@@ -1,0 +1,37 @@
+version: '3.5'
+
+services:
+  cms:
+    build:
+      context: .
+    image: rehborn/djangocms-boilerplate:latest
+    ports:
+      - "8000:8000"
+    command: poetry run python /app/src/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./config:/config/
+      - ./:/app/
+      - ./static:/app/static
+      - ./media:/app/media
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+
+  # Dependencies
+  postgres:
+    image: postgres:15
+    volumes:
+    - ./postgres/:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    restart: always
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    restart: always

@@ -1,0 +1,35 @@
+name: django-cms-boilerplate
+domain: example.dev
+
+timezone: "Europe/Berlin"
+secret_key: "django-secret-key"
+# sentry_dsn: "sentry-dsn"
+
+plugins:
+  - teams
+#  - components
+#  - contact_form
+#  - gallery
+#  - cookies_banner
+
+languages:
+  - de
+  - en
+
+templates:
+  home: "Custom Home Template"
+
+user_settings:
+  title: 'Website Title'
+  name: 'Your Name'
+  email: 'Contact E-Mail'
+
+#  name_prefix: 'Name (prefix)'
+#  name_suffix: 'Name (suffix)'
+
+#  address: 'Your Address'
+#  zipcode: 'Your Zipcode'
+#  city: 'Your City'
+#  phone: 'Your Phone Number'
+#  mobile: 'Your Mobile Number'
+#  fax: 'Your Fax Number'

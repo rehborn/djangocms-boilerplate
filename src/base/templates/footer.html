@@ -1,0 +1,54 @@
+{% load i18n static cms_tags menu_tags sekizai_tags %}
+
+{% page_url 'privacy' as privacy_url %}
+{% page_url 'legal-notice' as legal_notice_url %}
+
+<footer class="container py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <strong>{{ settings.user.name }}</strong><br/>
+                {% if settings.user.address %}{{ settings.user.address }}<br/>{% endif %}
+                {% if settings.user.zipcode %}{{ settings.user.zipcode }}{% endif %}
+                {% if settings.user.city %}{{ settings.user.city }}<br/>{% endif %}
+            </div>
+
+            <div class="col-md-4 col-sm-12">
+                {% if settings.user.phone %}
+                    <i class="fa-fw fas fa-phone"></i>
+                    <strong>{{ settings.user.phone }}</strong><br/>
+                {% endif %}
+
+                {% if settings.user.fax %}
+                    <i class="fa-fw fas fa-print"></i>
+                    <strong>{{ settings.user.fax }}</strong><br/>
+                {% endif %}
+
+                {% if settings.user.email %}
+                    <i class="fas fa-fw fas fa-envelope"></i>
+                    <strong>
+                        <a href="mailto:{{ settings.user.email }}">{{ settings.user.email }}</a>
+                    </strong><br/>
+                {% endif %}
+            </div>
+
+            <div class="col-md-4 col-sm-12">
+                {% if privacy_url %}
+                    <a href="{{ privacy_url }}">{% page_attribute 'menu_title' 'privacy' %}</a>
+                    <i class="fas fa-fw fa-circle" data-fa-transform="shrink-10"></i>
+                {% endif %}
+
+                {% if legal_notice_url %}
+                    <a href="{{ legal_notice_url }}">
+                        {% page_attribute 'menu_title' 'legal-notice' %}
+                    </a>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+    <div class="container py-5">
+        {% static_placeholder 'footer' %}
+    </div>
+</footer>

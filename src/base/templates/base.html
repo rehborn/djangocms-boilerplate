@@ -1,0 +1,57 @@
+{% load i18n static cms_tags menu_tags sekizai_tags %}
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE }}">
+<head>
+    <title>
+        {% block title %}{{ settings.user.title }}{% page_attribute "page_title" %}{% endblock title %}
+    </title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+
+    <meta name="description" content="{% page_attribute meta_description %}"/>
+    <meta name="keywords" content="{% page_attribute meta_keywords %}"/>
+    {% render_block "css" %}
+    {% block css %}{% endblock %}
+    {% include 'css.html' %}
+    <link href="{% static "bootstrap/dist/css/bootstrap.min.css" %}" rel="stylesheet"/>
+    <link href="{% static "flag-icons/css/flag-icons.min.css" %}" rel="stylesheet"/>
+    <link href="{% static "theme.css" %}" rel="stylesheet"/>
+</head>
+<body>
+{% cms_toolbar %}
+
+<main>
+    {% include 'header.html' %}
+    {% include 'navigation.html' %}
+    <div class="container">
+        {% block content %}{% endblock content %}
+    </div>
+    {% include 'footer.html' %}
+</main>
+
+{% render_block "js" %}
+<script src="{% url 'javascript-catalog' %}"></script>
+<script src="{% static "bootstrap/dist/js/bootstrap.bundle.min.js" %}" crossorigin="anonymous"></script>
+<script src="{% static "@fortawesome/fontawesome-free/js/all.min.js" %}" crossorigin="anonymous"></script>
+<script src="{% static "theme.js" %}" crossorigin="anonymous"></script>
+<script>
+    // Bootstrap theme based on prefers-color-scheme
+    const prefersQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
+    function setBootstrapTheme(e) {
+        const mode = e.matches ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-bs-theme', mode)
+    }
+
+    // on change
+    prefersQuery.addEventListener("change", setBootstrapTheme)
+    // on load
+    setBootstrapTheme(prefersQuery)
+
+    // bootstrap tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
+{% block js %}{% endblock %}
+</body>
+</html>

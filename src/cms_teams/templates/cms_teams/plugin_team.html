@@ -1,0 +1,33 @@
+{% load i18n static cms_tags menu_tags sekizai_tags thumbnail %}
+
+<h1>{{ team.title }}</h1>
+<p>{{ team.description }}</p>
+
+<div class="row">
+    {% for profile in team.members.all %}
+        <div class="col-3">
+            <div class="card h-100">
+
+                <div class="m-5">
+                    <a href="{% url 'cms_teams:team-member' team.slug profile.slug %}">
+                        <img alt="{{ profile.user.first_name }} {{ profile.user.last_name }}"
+                             class="rounded-circle w-100"
+                             src="
+                                     {% if profile.photo %}{% thumbnail profile.photo 512x512 crop upscale %}{% else %}{% static "avatar.png" %}{% endif %}"
+                        />
+                    </a>
+                </div>
+                <div class="text-center">
+                    <a href="{% url 'cms_teams:team-member' team.slug profile.slug %}">
+                        {{ profile.title }} {{ profile.user.first_name }} {{ profile.user.last_name }}
+                    </a>
+                    {% if user.profile.role %}
+                        <p style="font-style: italic">
+                            {{ profile.role }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

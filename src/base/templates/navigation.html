@@ -1,0 +1,24 @@
+{% load i18n static cms_tags menu_tags sekizai_tags %}
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand navbar-right" href="/" title="{{ settings.user.name }}">
+            <img alt="logo" src="{% static 'logo.png' %}" height="40"/>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto pr-5">
+                {% show_menu 0 100 100 100 "nav-items.html" %}
+            </ul>
+            <div class="ms-auto">
+                {% language_chooser "languages.html" %}
+            </div>
+        </div>
+
+    </div>
+</nav>

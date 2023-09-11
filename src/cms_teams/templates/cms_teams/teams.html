@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n static cms_tags menu_tags sekizai_tags thumbnail %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <div class="text-end">
+            <a href="{% url 'admin:cms_teams_team_changelist' %}" class="btn btn-sm btn-primary">Edit Teams</a>
+            <hr/>
+        </div>
+    {% endif %}
+
+    <h1>Teams</h1>
+    <ul>
+    {% for team in teams %}
+        <li>
+            <a href="{% url 'cms_teams:team' team.slug %}">{{ team.title }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock content %}

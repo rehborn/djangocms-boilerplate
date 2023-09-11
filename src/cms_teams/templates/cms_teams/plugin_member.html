@@ -1,0 +1,24 @@
+{% load i18n static cms_tags menu_tags sekizai_tags thumbnail %}
+
+<div class="row">
+    <div class="col-3">
+        <div class="card h-100">
+
+            <div class="m-5">
+                <img alt="{{ profile.user.first_name }} {{ profile.user.last_name }}"
+                     class="rounded-circle w-100"
+                     src="
+                             {% if profile.photo %}{% thumbnail profile.photo 512x512 crop upscale %}{% else %}{% static "avatar.png" %}{% endif %}"
+                />
+            </div>
+            <div class="text-center">
+                {{ profile.title }} {{ profile.user.first_name }} {{ profile.user.last_name }}
+                {% if user.profile.role %}
+                    <p style="font-style: italic">
+                        {{ profile.role }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

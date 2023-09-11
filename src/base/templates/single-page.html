@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n static cms_tags menu_tags sekizai_tags %}
+{% block content %}
+    {% for page in request.current_page.get_child_pages %}
+        {% if request.user.is_authenticated %}
+            <div class="text-end py-2">
+                <a href="{% page_url page %}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-fw fa-file-text"></i>
+                    {% page_attribute "title" page %}
+                </a>
+            </div>
+        {% endif %}
+
+        <div class="card" id="{{ page.slug }}">
+            <div class="card-header">
+                <h1>{% render_model page "title" %}</h1>
+            </div>
+            <div class="card-body">
+                {% show_placeholder "content" page %}
+            </div>
+        </div>
+    {% endfor %}
+    {#% render_model_add request.current_page %#}
+{% endblock content %}

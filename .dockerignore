@@ -1,0 +1,15 @@
+.vscode
+.idea
+.git
+.gitignore
+.env
+.env.example
+Dockerfile
+README.md
+docker-compose.yml
+docker-compose-deploy-example.yml
+media
+node_modules
+static
+tmp
+postgres
