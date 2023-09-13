@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'compressor',
     'base',
     'cms',
     'menus',
@@ -31,6 +32,9 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'mptt',
     'djangocms_text_ckeditor',
+    'djangocms_file',
+    'djangocms_link',
+    'djangocms_picture',
 ]
 
 plugins = config("plugins")
@@ -52,8 +56,10 @@ MIDDLEWARE = [
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
     'cms.middleware.utils.ApphookReloadMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
+
+if not DEBUG:
+    MIDDLEWARE.append('django.middleware.cache.FetchFromCacheMiddleware')
 
 ROOT_URLCONF = 'base.urls'
 
@@ -125,16 +131,29 @@ TIME_ZONE = 'UTC'
 if config('timezone'):
     TIME_ZONE = config('timezone')
 
+# Static Files
 STATICFILES_DIRS = [
-    # BASE_DIR / 'static',
     APP_DIR / 'config' / 'static',
     APP_DIR / 'node_modules',
+    BASE_DIR / 'static',
 ]
 
 
 STATIC_URL = 'static/'
 STATIC_ROOT = APP_DIR / "static"
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+
+)
+
+# Media
 MEDIA_URL = "media/"
 MEDIA_ROOT = APP_DIR / "media"
 
@@ -200,3 +219,7 @@ if config('sentry_dsn'):
         traces_sample_rate=1.0,
     )
 
+# DjangoCMS Plugins
+DJANGOCMS_PICTURE_TEMPLATES = [
+    ('background', _('Background image')),
+]
