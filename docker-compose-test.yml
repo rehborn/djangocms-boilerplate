@@ -56,7 +56,6 @@ services:
     image: rehborn/djangocms-boilerplate:latest
     command: >
       poetry run python /app/manage.py collectstatic --noinput && 
-      poetry run python /app/manage.py collectstatic --noinput &&
       poetry run python /app/manage.py boil
     volumes:
       - /srv/cms/config:/app/config
