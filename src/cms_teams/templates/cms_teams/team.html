@@ -29,7 +29,7 @@
                         <a href="{% url 'cms_teams:team-member' team.slug profile.slug %}">
                             {{ profile.title }} {{ profile.user.first_name }} {{ profile.user.last_name }}
                         </a>
-                        {% if user.profile.role %}
+                        {% if profile.role %}
                             <p style="font-style: italic">
                                 {{ profile.role }}
                             </p>
