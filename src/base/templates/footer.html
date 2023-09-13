@@ -3,7 +3,7 @@
 {% page_url 'privacy' as privacy_url %}
 {% page_url 'legal-notice' as legal_notice_url %}
 
-<footer class="container py-3">
+<footer class="container fixed-bottom py-3">
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-sm-12">
@@ -48,7 +48,11 @@
         </div>
 
     </div>
-    <div class="container py-5">
+    <div class="container py-2">
+        {% static_placeholder 'footer' %}
+    </div>
+    <div class="container py-2 text-center text-muted" style="font-size: 12px; ">
+        &copy; {% now "Y" %} {{ now }} {{ settings.user.name }}
         {% static_placeholder 'footer' %}
     </div>
 </footer>
