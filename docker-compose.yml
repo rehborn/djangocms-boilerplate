@@ -8,11 +8,10 @@ services:
     ports:
       - "8000:8000"
     command: poetry run python /app/src/manage.py runserver 0.0.0.0:8000
+    environment:
+      APP_DIR: /app
     volumes:
-      - ./config:/config/
       - ./:/app/
-      - ./static:/app/static
-      - ./media:/app/media
     restart: always
     depends_on:
       - postgres
