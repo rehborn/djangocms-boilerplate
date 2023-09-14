@@ -1,10 +1,16 @@
 FROM python:3.11
 
-WORKDIR /app
-
-COPY package.json package-lock.json pyproject.toml poetry.lock /app/
-
 ENV NODE_MAJOR=20
+
+ENV DEBUG=False
+
+ENV APP_DIR=/app
+ENV CONF_DIR=/config
+ENV STATIC_DIR=/static
+
+WORKDIR ${APP_DIR}
+
+COPY package.json package-lock.json pyproject.toml poetry.lock ${APP_DIR}
 
 RUN apt update && apt install ca-certificates curl gnupg -y && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
@@ -12,16 +18,16 @@ RUN apt update && apt install ca-certificates curl gnupg -y && \
 
 RUN apt update && apt install gettext nodejs -y && pip install poetry && poetry install && npm install
 
-ADD src /app
+ADD src ${APP_DIR}/src
 ADD example /config
+WORKDIR ${APP_DIR}/src
 
-RUN echo "DEBUG=False\nAPP_DIR=/app" > /app/.env
-
-# RUN poetry run python /app/src/manage.py compilemessages && poetry run python /app/src/manage.py collectstatic --noinput
+RUN poetry run python manage.py compilemessages
 
 # cleanup
 RUN apt remove ca-certificates curl gnupg nodejs -y && \
     rm -rf /var/lib/apt/lists/* /var/log/* /var/lib/dpkg/info/*
 
+EXPOSE 80
 
-CMD ["poetry", "run", "gunicorn", "--bind", ":8000", "base.wsgi:application"]
+CMD ["poetry", "run", "gunicorn", "--bind", ":80", "base.wsgi:application"]
