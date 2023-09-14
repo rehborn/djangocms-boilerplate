@@ -7,9 +7,12 @@ from .config import config, env, DEBUG, APP_DIR, CONF_DIR, STATIC_DIR
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = ''
-if config("secret_key"):
-    SECRET_KEY = config("secret_key")
+SECRET_KEY = config("secret_key")
+if not SECRET_KEY:
+    from random import choice
+    from string import ascii_letters
+    SECRET_KEY = "fallback-key-{}".format("".join([choice(ascii_letters) for _ in range(80)]))
+
 
 ALLOWED_HOSTS = ["*"]
 
