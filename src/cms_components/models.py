@@ -1,9 +1,11 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from .choices import *
+
 
 class Component(models.Model):
-    component = models.CharField(max_length=50, unique=True)
+    component = models.CharField(max_length=50, unique=True, choices=COMPONENT_CHOICES)
     data = models.JSONField(default={})
 
     def __str__(self):
