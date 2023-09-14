@@ -13,6 +13,10 @@ if config("secret_key"):
 
 ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = []
+if config("domain"):
+    CSRF_TRUSTED_ORIGINS.append("https://{}".format(config("domain")))
+
 INSTALLED_APPS = [
     'modeltranslation',
     'djangocms_admin_style',
