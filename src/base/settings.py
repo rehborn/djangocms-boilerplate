@@ -2,12 +2,14 @@ from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
 
-from .config import config, env, DEBUG, APP_DIR
+from .config import config, env, DEBUG, APP_DIR, CONF_DIR, STATIC_DIR
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config("secret_key")
+SECRET_KEY = ''
+if config("secret_key"):
+    SECRET_KEY = config("secret_key")
 
 ALLOWED_HOSTS = ["*"]
 
@@ -66,7 +68,10 @@ ROOT_URLCONF = 'base.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates', APP_DIR / 'config' / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'templates',
+            CONF_DIR / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,14 +138,13 @@ if config('timezone'):
 
 # Static Files
 STATICFILES_DIRS = [
-    APP_DIR / 'config' / 'static',
+    CONF_DIR / 'static',
     APP_DIR / 'node_modules',
     BASE_DIR / 'static',
 ]
 
-
 STATIC_URL = 'static/'
-STATIC_ROOT = APP_DIR / "static"
+STATIC_ROOT = STATIC_DIR
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -211,7 +215,7 @@ if config('templates'):
 # }
 
 # optional: enable sentry
-if config('sentry_dsn'):
+if not DEBUG and config('sentry_dsn'):
     import sentry_sdk
 
     sentry_sdk.init(
