@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-psycopg2-binary = "^2.9.7"
+psycopg2-binary = "^2.9.9"
 django-cms = "^3.11.4"
 django-sekizai = "^4.1.0"
 django-filer = "^3.0.6"
