@@ -27,11 +27,10 @@ services:
       context: .
     image: rehborn/djangocms-boilerplate:latest
     volumes:
-      - /srv/cms/config:/app/config/
+      - /srv/cms/config:/config/
       - /srv/cms/media:/app/media/
+      - static:/static/
     restart: always
-    ports:
-      - "8000:8000"
     labels:
       - traefik.enable=true
       - traefik.http.routers.cms.rule=Host(`test.local`) && PathPrefix(`/`)
@@ -55,12 +54,11 @@ services:
   job-once:
     image: rehborn/djangocms-boilerplate:latest
     command: >
-      poetry run python /app/manage.py collectstatic --noinput && 
-      poetry run python /app/manage.py collectstatic --noinput &&
-      poetry run python /app/manage.py boil
+      poetry run python manage.py collectstatic --noinput && 
+      poetry run python manage.py boil
     volumes:
-      - /srv/cms/config:/app/config
-      - static:/app/static/
+      - /srv/cms/config:/config
+      - static:/static/
     depends_on:
       - postgres
       - redis
@@ -68,16 +66,16 @@ services:
 
   job-migrate:
     image: rehborn/djangocms-boilerplate:latest
-    command: poetry run python /app/manage.py migrate
+    command: poetry run python manage.py migrate
     volumes:
-      - /srv/cms/config:/app/config
+      - /srv/cms/config:/config
     depends_on:
       - postgres
       - redis
     restart: 'no'
 
   postgres:
-    image: postgres:12
+    image: postgres:15
     volumes:
     - /srv/cms/postgres/:/var/lib/postgresql/data/
     environment:

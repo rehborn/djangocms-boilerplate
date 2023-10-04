@@ -1,8 +1,8 @@
 .vscode
 .idea
 
-static/
-media/
+/static/
+/media/
 node_modules/
 *.mo
 

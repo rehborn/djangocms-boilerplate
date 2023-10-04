@@ -2,12 +2,10 @@
 .idea
 .git
 .gitignore
-.env
-.env.example
+.env*
 Dockerfile
 README.md
-docker-compose.yml
-docker-compose-deploy-example.yml
+docker-compose*
 media
 node_modules
 static

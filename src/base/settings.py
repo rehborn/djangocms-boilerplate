@@ -2,14 +2,23 @@ from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
 
-from .config import config, env, DEBUG, APP_DIR
+from .config import config, env, DEBUG, APP_DIR, CONF_DIR, STATIC_DIR
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config("secret_key")
+if not SECRET_KEY:
+    from random import choice
+    from string import ascii_letters
+    SECRET_KEY = "fallback-key-{}".format("".join([choice(ascii_letters) for _ in range(80)]))
+
 
 ALLOWED_HOSTS = ["*"]
+
+CSRF_TRUSTED_ORIGINS = []
+if config("domain"):
+    CSRF_TRUSTED_ORIGINS.append("https://{}".format(config("domain")))
 
 INSTALLED_APPS = [
     'modeltranslation',
@@ -22,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'compressor',
     'base',
     'cms',
     'menus',
@@ -31,6 +41,9 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'mptt',
     'djangocms_text_ckeditor',
+    'djangocms_file',
+    'djangocms_link',
+    'djangocms_picture',
 ]
 
 plugins = config("plugins")
@@ -52,15 +65,20 @@ MIDDLEWARE = [
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
     'cms.middleware.utils.ApphookReloadMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
+
+if not DEBUG:
+    MIDDLEWARE.append('django.middleware.cache.FetchFromCacheMiddleware')
 
 ROOT_URLCONF = 'base.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates', APP_DIR / 'config' / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'templates',
+            CONF_DIR / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,16 +143,28 @@ TIME_ZONE = 'UTC'
 if config('timezone'):
     TIME_ZONE = config('timezone')
 
+# Static Files
 STATICFILES_DIRS = [
-    # BASE_DIR / 'static',
-    APP_DIR / 'config' / 'static',
+    CONF_DIR / 'static',
     APP_DIR / 'node_modules',
+    BASE_DIR / 'static',
 ]
 
-
 STATIC_URL = 'static/'
-STATIC_ROOT = APP_DIR / "static"
+STATIC_ROOT = STATIC_DIR
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+
+)
+
+# Media
 MEDIA_URL = "media/"
 MEDIA_ROOT = APP_DIR / "media"
 
@@ -192,7 +222,7 @@ if config('templates'):
 # }
 
 # optional: enable sentry
-if config('sentry_dsn'):
+if not DEBUG and config('sentry_dsn'):
     import sentry_sdk
 
     sentry_sdk.init(
@@ -200,3 +230,7 @@ if config('sentry_dsn'):
         traces_sample_rate=1.0,
     )
 
+# DjangoCMS Plugins
+DJANGOCMS_PICTURE_TEMPLATES = [
+    ('background', _('Background image')),
+]

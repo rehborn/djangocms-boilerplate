@@ -21,15 +21,12 @@ templates:
 
 user_settings:
   title: 'Website Title'
-  name: 'Your Name'
+  name: 'Name or Company'
   email: 'Contact E-Mail'
-
-#  name_prefix: 'Name (prefix)'
-#  name_suffix: 'Name (suffix)'
-
 #  address: 'Your Address'
 #  zipcode: 'Your Zipcode'
 #  city: 'Your City'
+#  country: 'Your Country'
 #  phone: 'Your Phone Number'
 #  mobile: 'Your Mobile Number'
 #  fax: 'Your Fax Number'

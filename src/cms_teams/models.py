@@ -18,7 +18,6 @@ class Team(models.Model):
     menu = models.BooleanField(default=False, verbose_name=u"collapse users in menu")
 
     template = models.CharField(default="team.html", max_length=30, choices=TEAM_APP_TEMPLATES)
-    ordering = models.CharField(choices=ORDERING_CHOICES, default='asc', max_length=12)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -51,6 +50,11 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}"
+
+    class Meta:
+        verbose_name = _("member")
+        verbose_name_plural = _("members")
+        ordering = ["-priority", "slug"]
 
 
 class UserMeta(models.Model):
