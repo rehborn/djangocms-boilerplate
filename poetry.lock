@@ -248,20 +248,20 @@ typing-extensions = "*"
 
 [[package]]
 name = "django-mptt"
-version = "0.14.0"
+version = "0.15.0"
 description = "Utilities for implementing Modified Preorder Tree Traversal with your Django Models and working with trees of Model instances."
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.9"
 files = [
-    {file = "django-mptt-0.14.0.tar.gz", hash = "sha256:2c92a2b1614c53086278795ccf50580cf1f9b8564f3ff03055dd62bab5987711"},
-    {file = "django_mptt-0.14.0-py3-none-any.whl", hash = "sha256:d9a87433ab0e4f35247c6f6d5a93ace6990860a4ba8796f815d185f773b9acfc"},
+    {file = "django_mptt-0.15.0-py3-none-any.whl", hash = "sha256:2574c014b102a41c642be5921f59356b8437fc83c9866d97644c6a0c5dc8ccc1"},
+    {file = "django_mptt-0.15.0.tar.gz", hash = "sha256:0df19d5a55f34e73df58ee03fbe0d91807493de4bd3a09f6eb00fc62920035d9"},
 ]
 
 [package.dependencies]
 django-js-asset = "*"
 
 [package.extras]
-tests = ["coverage", "mock-django"]
+tests = ["coverage[toml]", "mock-django"]
 
 [[package]]
 name = "django-polymorphic"
@@ -1115,4 +1115,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "06c0ff76ce63443ac4d756fe3265a62792b32486f15af11a65e240e1bcb033a5"
+content-hash = "512099b2b1eb67cc86de79809e29c427889dfbcad40d0188ad382ea22e72740c"
