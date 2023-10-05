@@ -15,6 +15,7 @@ env:
 
 jobs:
   build:
+    name: Build Image
     runs-on: ubuntu-latest
 
     permissions:
@@ -27,22 +28,24 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push Docker image
+      - name: Build
         uses: docker/build-push-action@v5
         with:
           context: .
           load: true
-          tags: ${{ github.repository }}
+          tags: ${{ github.repository }}:latest
 
   test:
+    name: Run Tests
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Testing
         run: |
-          docker run --rm ${{ github.repository }} echo "test" 
+          docker run --rm ${{ github.repository }}:latest echo "test" 
 
   push-ghcr:
+    name: Push to GHCR Registry
     if: ${{ github.actor != 'dependabot[bot]' }}
     needs: test
     runs-on: ubuntu-latest
@@ -75,6 +78,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   push-dockerhub:
+    name: Push to DockerHub Registry
     if: startsWith(github.ref, 'refs/tags/v') && ${{ github.actor != 'dependabot[bot]' }}
 
     needs: test
